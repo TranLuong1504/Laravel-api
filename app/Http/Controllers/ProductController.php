@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Requests\ProductRequest;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
@@ -42,7 +43,17 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $productRequest)
     {
-        return "jgbg";
+        $product = new Product();
+        $product->name =  $productRequest->name;
+        $product->detail =  $productRequest->description; 
+        $product->stock =  $productRequest->stock; 
+        $product->price =  $productRequest->price; 
+        $product->discount =  $productRequest->discount;
+
+        $product->save();
+        return response()->json([
+            'data' => new ProductResource($product)
+        ],Response::HTTP_CREATED);
     }
 
     /**
@@ -74,9 +85,13 @@ class ProductController extends Controller
      * @param  \App\Model\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $productRequest, Product $product)
     {
-        //
+        $product->detail =  $productRequest->description; 
+        $product->update($productRequest->all());
+        return response()->json([
+            'data' => new ProductResource($product)
+        ],Response::HTTP_CREATED);
     }
 
     /**

@@ -25,7 +25,7 @@ class ProductRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255|unique:products',
-            'detail' => 'required',
+            'description' => 'required',
             'price' => 'required|max:10',
             'stock' => 'required|max:6',
             'discount' => 'required|max:2'
@@ -37,7 +37,7 @@ class ProductRequest extends FormRequest
             'name.required'     => 'Name không được để trống',
             'name.max'          => 'Name không được quá 255 kí tự',
             'name.unique'       => 'Name không được trùng',
-            'detail.required'   => 'Detail không được để trống',
+            'description.required'   => 'Detail không được để trống',
             'price.required'    => 'Price không được để trống',
             'price.max'         => 'Price max 10 chữ số',
             'stock.required'    => 'Stock không được để trống',
