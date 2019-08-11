@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Model\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Resources\Product\ProductResource;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Requests\ProductRequest;
 use Symfony\Component\HttpFoundation\Response;
+use App\Exceptions\ProductNotBelongsToUser;
 
 class ProductController extends Controller
 {
@@ -87,6 +89,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $productRequest, Product $product)
     {
+        $this->ProductUserCheck($product);
         $product->detail =  $productRequest->description; 
         $product->update($productRequest->all());
         return response()->json([
@@ -106,5 +109,13 @@ class ProductController extends Controller
         return response()->json([
             'message' => 'Product delete sucessfully'
         ],Response::HTTP_CREATED);
+    }
+
+    public function ProductUserCheck($product)
+    {
+        if(Auth::id() !== $product->user_id){
+            throw new ProductNotBelongsToUser;
+        }
+
     }
 }
